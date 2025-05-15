@@ -1,10 +1,11 @@
 <template>
-    <div class="login-container">
+    <div class="signup-container">
         <h2>회원가입</h2>
         <form @submit.prevent="handleSignUp">
+            <input v-model="name" type="text" placeholder="이름" required />
             <input v-model="email" type="email" placeholder="이메일" required />
             <input v-model="password" type="password" placeholder="비밀번호" required />
-            <button type="submit">로그인</button>
+            <button type="submit">회원가입</button>
         </form>
         <p>
             이미 계정이 있으신가요?
@@ -16,15 +17,22 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-// 회원가입 API 함수 나중에 연결 예정
+import { signUp } from '@/api/auth.js';
+
+const name = ref('');
 const email = ref('');
 const password = ref('');
 const router = useRouter();
 
 const handleSignUp = async () => {
-    console.log('회원가입 시도:', email.value, password.value);
-    // 여기에 회원가입 API 연결 예정
-    alert('회원가입 요청 완료(연결 예정)');
+    // console.log('회원가입 시도:', email.value, password.value);
+    try {
+        await signUp({ name: name.value, email: email.value, password: password.value });
+        alert('회원가입 성공🎉 로그인 페이지로 이동합니다.');
+        router.push('/login');
+    } catch (err) {
+        alert('회원가입 실패:' + err.response?.data?.message || err.message);
+    }
 };
 </script>
 
@@ -36,9 +44,10 @@ const handleSignUp = async () => {
     border: 1px solid #ccc;
     border-radius: 12px;
 }
+
 input {
     display: block;
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-top: 12px;
     border-radius: 6px;
@@ -48,13 +57,13 @@ button {
     margin-top: 20px;
     padding: 10px;
     width: 100%;
-    background-color: #22c55e;
+    background-color: #0ea5e9;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
 }
 button:hover {
-    background-color: #16a34a;
+    background-color: #0284c7;
 }
 </style>

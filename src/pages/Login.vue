@@ -16,15 +16,24 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-// 로그인 API 함수 나중에 연결 예정
+import { login } from '@/api/auth.js';
+import { useAuthStore } from '@/stores/auth.js';
+
 const email = ref('');
 const password = ref('');
 const router = useRouter();
+const authStore = useAuthStore();
 
 const handleLogin = async () => {
-    console.log('로그인 시도:', email.value, password.value);
-    // 여기에 로그인 API 연결 예정
-    alert('로그인 요청 완료(연결 예정)');
+    // console.log('로그인 시도:', email.value, password.value);
+    try {
+        const data = await login({ email: email.value, password: password.value });
+        authStore.setAuth({ token: data.token, user: data.user });
+        alert('로그인 성공!');
+        router.push('/');
+    } catch (err) {
+        alert('로그인 실패:' + err.response?.data?.message || err.message);
+    }
 };
 </script>
 
