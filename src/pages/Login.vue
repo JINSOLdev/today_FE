@@ -25,12 +25,16 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const handleLogin = async () => {
-    // console.log('로그인 시도:', email.value, password.value);
     try {
         const data = await login({ email: email.value, password: password.value });
+        // 토큰 저장 (백엔드에 요청 필요)
+        localStorage.setItem('token', data.token);
+
+        // pinia 스토어에 사용자 정보 저장
         authStore.setAuth({ token: data.token, user: data.user });
+
         alert('로그인 성공!');
-        router.push('/');
+        router.push('/mypage');
     } catch (err) {
         alert('로그인 실패:' + err.response?.data?.message || err.message);
     }
