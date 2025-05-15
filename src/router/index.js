@@ -4,12 +4,14 @@ import Signup from '@/pages/Signup.vue';
 import Mypage from '@/pages/Mypage.vue';
 import CreateEvent from '@/pages/CreateEvent.vue';
 
+
 const routes = [
     { path: '/', redirect: '/login' },
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
     { path: '/mypage', component: Mypage },
     { path: '/create-event', component: CreateEvent },
+
 ];
 
 const router = createRouter({
